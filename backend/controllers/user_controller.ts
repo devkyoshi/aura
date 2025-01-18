@@ -1,12 +1,17 @@
-import { IUpdateUser, IUser } from '@datatypes/user_tp';
+import { IUpdateUser } from '@datatypes/user_tp';
 import { Request } from 'express';
 import logger from '@config/logger';
 import User from '@models/user_model';
+
+import mongoose from 'mongoose';
 import {
   error_messages,
   HTTP_STATUS,
   success_messages,
 } from '@config/constants';
+import bcrypt from 'bcryptjs';
+
+mongoose.set('debug', true);
 
 export const updateUser = async (req: Request<IUpdateUser>, res: any) => {
   const userID = req.params.user_id;
@@ -40,20 +45,40 @@ export const updateUser = async (req: Request<IUpdateUser>, res: any) => {
       'username',
       'email',
       'phone',
-      'password',
-      'address',
-      'city',
       'role',
-      'postal_code',
-      'country',
     ];
 
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      current_user.password = await bcrypt.hash(req.body.password, salt);
+    }
+
+    // Update top-level fields
     for (const key of Object.keys(req.body) as (keyof IUpdateUser)[]) {
       if (allowed_updates.includes(key) && req.body[key] !== undefined) {
         (current_user as any)[key] = req.body[key];
       }
     }
+
+    // Handle nested 'location' updates
+    if (req.body.location) {
+      const locationUpdates = req.body.location;
+
+      if (typeof locationUpdates === 'object') {
+        for (const key of Object.keys(locationUpdates)) {
+          if (
+            ['address', 'city', 'postal_code', 'country'].includes(key) &&
+            locationUpdates[key] !== undefined
+          ) {
+            (current_user.location as any)[key] = locationUpdates[key];
+          }
+        }
+      }
+    }
+
+    // Save updated user
     await current_user.save();
+
     logger.info(`User updated successfully: ${userID}`);
 
     return res.status(HTTP_STATUS.OK).json({

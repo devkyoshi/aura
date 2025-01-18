@@ -3,7 +3,7 @@ import { updateUser, removeUser } from '@controllers/user_controller';
 
 const router = express.Router();
 
-router.post('/update/:{id}', updateUser);
-router.post('/delete/:{id}', removeUser);
+router.post('/update/:user_id', updateUser);
+router.post('/delete/:user_id', removeUser);
 
 export default router;
