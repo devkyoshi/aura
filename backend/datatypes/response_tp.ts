@@ -3,4 +3,3 @@
 //     message: string; // A message describing the result of the request.
 //     success: boolean; // Whether the request was successful.
 // }
-

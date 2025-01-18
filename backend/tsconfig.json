@@ -8,18 +8,15 @@
     "forceConsistentCasingInFileNames": true,
 
     "paths": {
-        "@config/*": ["config/*"],
-        "@models/*": ["models/*"],
-        "@routes/*": ["routes/*"],
-        "@controllers/*": ["controllers/*"],
-        "@utils/*": ["utils/*"],
-        "@middleware/*": ["middleware/*"],
-        "@datatypes/*": ["datatypes/*"]
-    },
-
+      "@config/*": ["config/*"],
+      "@models/*": ["models/*"],
+      "@routes/*": ["routes/*"],
+      "@controllers/*": ["controllers/*"],
+      "@utils/*": ["utils/*"],
+      "@middleware/*": ["middleware/*"],
+      "@datatypes/*": ["datatypes/*"]
+    }
   },
   "include": ["**/*.ts"],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

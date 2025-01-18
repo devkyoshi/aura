@@ -1,0 +1,6 @@
+2025-01-18 17:20:32 [32minfo[39m: Attempting to register user: ashan
+2025-01-18 17:20:36 [32minfo[39m: User registered successfully with username: ashan
+2025-01-18 17:22:43 [32minfo[39m: Attempting to log in user: ashan
+2025-01-18 17:22:43 [32minfo[39m: User logged in successfully with username: ashan
+2025-01-18 17:24:29 [32minfo[39m: Attempting to log in user: ashan
+2025-01-18 17:24:29 [31merror[39m: Attempt failed to log in user: invalid credentials
