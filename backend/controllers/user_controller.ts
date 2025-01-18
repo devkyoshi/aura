@@ -1,4 +1,4 @@
-import { IUpdateUser } from '@datatypes/user_tp';
+import { IUpdateUser, IUser, IUserDTO } from '@datatypes/user_tp';
 import { Request } from 'express';
 import logger from '@config/logger';
 import User from '@models/user_model';
@@ -129,6 +129,59 @@ export const removeUser = async (req: Request, res: any) => {
     });
   } catch (error) {
     logger.error(`Delete attempt failed: ${error}`);
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      message: error_messages.server_error,
+      success: false,
+    });
+  }
+};
+
+export const getUser = async (req: Request, res: any) => {
+  const userID = req.params.user_id;
+  logger.info(`Attempting to get user: ${userID}`);
+  try {
+    if (!userID) {
+      logger.error('Get attempt failed: Invalid inputs: Missing user_id');
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        data: null,
+        message: error_messages.invalid_inputs,
+        success: false,
+      });
+    }
+
+    const user = await User.findOne({ _id: userID });
+    if (!user) {
+      logger.error(
+        `Get user attempt failed: User not found with the user_id: ${userID}`
+      );
+      return res.status(HTTP_STATUS.NOT_FOUND).json({
+        data: null,
+        message: error_messages.user_not_found,
+        success: false,
+      });
+    }
+
+    const user_dto: IUserDTO = {
+      user_id: user._id as unknown as string,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      username: user.username,
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+      location: user.location,
+      created_at: user.createdAt,
+      updated_at: user.updatedAt,
+    };
+
+    return res.status(HTTP_STATUS.OK).json({
+      data: user_dto,
+      message: success_messages.user_fetch_success,
+      success: true,
+    });
+  } catch (error) {
+    logger.error(`Get user attempt failed: ${error}`);
     return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       data: null,
       message: error_messages.server_error,

@@ -60,7 +60,7 @@ export const registerUser = async (req: Request<IUser>, res: any) => {
     await new_user.save();
 
     const token = jwt.sign(
-      { id: new_user._id },
+      { id: new_user._id, role: new_user.role },
       process.env.JWT_SECRET as string,
       { expiresIn: '1d' }
     );
@@ -120,9 +120,13 @@ export const loginUser = async (req: Request<ILogin>, res: any) => {
       });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string, {
-      expiresIn: '1d',
-    });
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET as string,
+      {
+        expiresIn: '1d',
+      }
+    );
 
     logger.info(
       `User logged in successfully with username: ${login_request.username}`

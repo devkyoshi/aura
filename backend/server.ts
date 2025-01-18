@@ -6,6 +6,7 @@ require('dotenv').config();
 
 import express from 'express';
 import cors from 'cors';
+import { validateJWT } from './middlewares/jwtAuth_middleware';
 
 //Application initialization
 const app = express();
@@ -21,7 +22,7 @@ app.get('/health', (req: any, res: { send: (arg0: string) => void }) => {
 });
 
 app.use('/api/auth', authRouter);
-app.use('/api/user', userRouter);
+app.use('/api/user', validateJWT as express.RequestHandler, userRouter);
 
 const PORT = process.env.SERVER_PORT || 5000;
 const server = app.listen(PORT, () => {
