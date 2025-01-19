@@ -24,6 +24,7 @@ const classroomSchema = new mongoose.Schema(
         ref: 'user',
       },
     ],
+    passcode: { type: String },
     category: {
       type: String,
       required: true,
@@ -38,6 +39,8 @@ const classroomSchema = new mongoose.Schema(
     end_time: { type: Date, required: true },
     thumbnail: { type: String, required: true },
     published: { type: Boolean, default: false },
+    is_active: { type: Boolean, default: true },
+    is_private: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
