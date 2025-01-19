@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { error_messages, HTTP_STATUS } from '@config/constants';
-import { rolePermissions } from '@config/user_permissions';
+import { permissions, rolePermissions } from '@config/user_permissions';
 import logger from '@config/logger';
 
 interface CustomRequest extends Request {
@@ -33,7 +33,10 @@ export const checkPermission = (required_permission: string) => {
     }
 
     // Check if the user has the required permission
-    if (!rolePermissions[userRole].includes(required_permission)) {
+    if (
+      !rolePermissions[userRole].includes(permissions.admin_permission) &&
+      !rolePermissions[userRole].includes(required_permission)
+    ) {
       logger.error(
         `Request denied: User with role: ${userRole} does not have permission: ${required_permission}`
       );

@@ -11,6 +11,7 @@ export const error_messages = {
   missing_fields: 'Missing fields. Please check and try again',
   role_not_defined: 'Role not defined for the request',
   invalid_role: 'Role is not valid',
+  no_users_found: 'No users found',
   server_error: 'Server Error. Please contact support or try again later',
 };
 
