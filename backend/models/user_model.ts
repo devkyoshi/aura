@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { USER_ROLE } from '@config/app_constants';
 
 const userSchema = new mongoose.Schema(
   {
@@ -16,8 +17,8 @@ const userSchema = new mongoose.Schema(
     username: { type: String, required: true, unique: true },
     role: {
       type: String,
-      default: 'student',
-      enum: ['teacher', 'student', 'admin'],
+      default: USER_ROLE.STUDENT,
+      enum: [USER_ROLE.INSTRUCTOR, USER_ROLE.STUDENT, USER_ROLE.ADMIN],
     },
   },
   { timestamps: true }

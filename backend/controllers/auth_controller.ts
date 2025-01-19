@@ -9,6 +9,7 @@ import {
 } from '@config/constants';
 import { Request } from 'express';
 import logger from '@config/logger';
+import { USER_ROLE } from '@config/app_constants';
 
 export const registerUser = async (req: Request<IUser>, res: any) => {
   try {
@@ -43,6 +44,16 @@ export const registerUser = async (req: Request<IUser>, res: any) => {
       });
     }
 
+    //check if role is valid if provided
+    if (req.body.role && !Object.values(USER_ROLE).includes(req.body.role)) {
+      logger.error('Update attempt failed: Invalid role');
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        data: null,
+        message: error_messages.invalid_role,
+        success: false,
+      });
+    }
+
     const salt = await bcrypt.genSalt(10);
     const hashed_password = await bcrypt.hash(user_data.password, salt);
 
@@ -68,14 +79,14 @@ export const registerUser = async (req: Request<IUser>, res: any) => {
     logger.info(
       `User registered successfully with username: ${user_data.username}`
     );
-    return res.status(201).json({
+    return res.status(HTTP_STATUS.CREATED).json({
       data: { token },
       message: success_messages.user_registered_successfully,
       success: true,
     });
   } catch (e) {
     logger.error('Error registering user: ', e);
-    return res.status(500).json({
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       data: null,
       message: error_messages.server_error,
       success: false,

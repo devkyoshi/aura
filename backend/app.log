@@ -115,3 +115,11 @@
 2025-01-19 14:25:16 [31merror[39m: Request denied: User with role: teacher does not have permission: get_all_users
 2025-01-19 14:25:24 [32minfo[39m: User with id: 678b9ef393c315290f601348 and role: admin is authorized
 2025-01-19 14:25:24 [32minfo[39m: Attempting to get all users
+2025-01-19 18:11:24 [32minfo[39m: Attempting to register user: chanmi
+2025-01-19 18:11:24 [31merror[39m: Error registering user:  user validation failed: role: `teacher` is not a valid enum value for path `role`.
+2025-01-19 18:14:07 [32minfo[39m: Attempting to register user: chanmi
+2025-01-19 18:14:07 [31merror[39m: Update attempt failed: Invalid role
+2025-01-19 18:14:19 [32minfo[39m: Attempting to register user: chanmi
+2025-01-19 18:14:20 [32minfo[39m: User registered successfully with username: chanmi
+2025-01-19 18:15:11 [32minfo[39m: Attempting to register user: ashan
+2025-01-19 18:15:11 [32minfo[39m: User registered successfully with username: ashan

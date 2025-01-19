@@ -9,6 +9,6 @@ export const permissions = {
 
 export const rolePermissions: { [key: string]: string[] } = {
   admin: [permissions.admin_permission],
-  teacher: [permissions.view_user_profile, permissions.update_user],
+  instructor: [permissions.view_user_profile, permissions.update_user],
   student: [permissions.update_user],
 };

@@ -1,4 +1,4 @@
-import { IUpdateUser, IUser, IUserDTO } from '@datatypes/user_tp';
+import { IUpdateUser, IUserDTO } from '@datatypes/user_tp';
 import { Request } from 'express';
 import logger from '@config/logger';
 import User from '@models/user_model';
@@ -10,6 +10,7 @@ import {
   success_messages,
 } from '@config/constants';
 import bcrypt from 'bcryptjs';
+import { USER_ROLE } from '@config/app_constants';
 
 mongoose.set('debug', true);
 
@@ -150,6 +151,17 @@ export const updateUser = async (req: Request<IUpdateUser>, res: any) => {
       'role',
     ];
 
+    //check if role is valid if provided
+    if (req.body.role && !Object.values(USER_ROLE).includes(req.body.role)) {
+      logger.error('Update attempt failed: Invalid role');
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        data: null,
+        message: error_messages.invalid_role,
+        success: false,
+      });
+    }
+
+    // Update password if provided
     if (req.body.password) {
       const salt = await bcrypt.genSalt(10);
       current_user.password = await bcrypt.hash(req.body.password, salt);

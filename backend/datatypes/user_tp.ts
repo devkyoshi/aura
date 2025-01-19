@@ -1,3 +1,5 @@
+import { USER_ROLE } from '@config/app_constants';
+
 export interface IUser {
   first_name: string;
   last_name: string;
@@ -9,7 +11,10 @@ export interface IUser {
   email: string;
   password: string;
   username: string;
-  role?: 'teacher' | 'student' | 'admin';
+  role?:
+    | typeof USER_ROLE.INSTRUCTOR
+    | typeof USER_ROLE.STUDENT
+    | typeof USER_ROLE.ADMIN;
 }
 
 export interface IUserDTO {
@@ -30,7 +35,10 @@ export interface IUserDTO {
   username: string;
   created_at: Date;
   updated_at: Date;
-  role?: 'teacher' | 'student' | 'admin';
+  role?:
+    | typeof USER_ROLE.INSTRUCTOR
+    | typeof USER_ROLE.STUDENT
+    | typeof USER_ROLE.ADMIN;
 }
 
 export interface IUpdateUser {
@@ -45,7 +53,10 @@ export interface IUpdateUser {
   email: string;
   password: string;
   username: string;
-  role?: 'teacher' | 'student' | 'admin';
+  role?:
+    | typeof USER_ROLE.INSTRUCTOR
+    | typeof USER_ROLE.STUDENT
+    | typeof USER_ROLE.ADMIN;
 }
 
 export interface ILogin {

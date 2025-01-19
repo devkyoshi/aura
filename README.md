@@ -107,7 +107,7 @@ NOTE: Replace `:user_id` with the user's ID in the request URL.
 
 This project uses role-based access control (RBAC) to manage user permissions. There are three roles:
 1. **Student:** Default role assigned to all students. Students can view courses, enroll in courses, and view their progress.
-2. **Teacher:** Teachers can create courses, update courses, and view analytics for their courses.
+2. **Instructors:** Instructors can create courses, update courses, and view analytics for their courses.
 3. **Admin:** Admins have full access to all resources. They can create, update, and delete courses, users, and other resources.
 
 Once the user logged in, the server sends a JWT with `{id, role}` payload. The client stores the JWT in local storage and sends it in the `Authorization` header for protected routes.
