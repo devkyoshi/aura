@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema(
       default: USER_ROLE.STUDENT,
       enum: [USER_ROLE.INSTRUCTOR, USER_ROLE.STUDENT, USER_ROLE.ADMIN],
     },
+    refresh_token: { type: String },
   },
   { timestamps: true }
 );

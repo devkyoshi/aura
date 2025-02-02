@@ -4,6 +4,8 @@ export const CLASS_CATEGORY = {
   PRIMARY: 'PRIMARY',
 };
 
+export const CLASS_CATEGORIES = ['A_LEVEL', 'O_LEVEL', 'PRIMARY'];
+
 export namespace USER_ROLE {
   export const INSTRUCTOR = 'instructor';
   export const STUDENT = 'student';

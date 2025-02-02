@@ -12,16 +12,23 @@ export const error_messages = {
   role_not_defined: 'Role not defined for the request',
   invalid_role: 'Role is not valid',
   no_users_found: 'No users found',
+  user_not_provided: 'User not provided. Please log in',
   server_error: 'Server Error. Please contact support or try again later',
 };
 
 export const success_messages = {
+  //classroom messages
+  classroom_created_success: 'Classroom created successfully',
+  classroom_fetch_success: 'Classroom fetched successfully',
+  //user and auth messages
   user_registered_successfully: 'User registered successfully',
   user_login_success: 'User logged in successfully',
   user_updated_success: 'User updated successfully',
   user_deleted_success: 'User deleted successfully',
   user_fetch_success: 'User fetched successfully',
+  token_refreshed: 'Token refreshed successfully',
 
+  //server messages
   server_connected: 'MongoDB connected successfully',
   server_running: 'Aura backend server is running!',
 };

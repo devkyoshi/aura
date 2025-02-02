@@ -5,10 +5,15 @@ export const permissions = {
   delete_user: 'delete_user',
   update_user: 'update_user',
   get_all_users: 'get_all_users',
+  create_classroom: 'create_classroom',
 };
 
 export const rolePermissions: { [key: string]: string[] } = {
   admin: [permissions.admin_permission],
-  instructor: [permissions.view_user_profile, permissions.update_user],
+  instructor: [
+    permissions.view_user_profile,
+    permissions.update_user,
+    permissions.create_classroom,
+  ],
   student: [permissions.update_user],
 };

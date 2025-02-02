@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { error_messages, HTTP_STATUS } from '@config/constants';
 import logger from '@config/logger';
+import { ObjectId } from 'mongoose';
 
 interface CustomRequest extends Request {
   user?: { id: string; role: string } | string;
@@ -28,8 +29,8 @@ export const validateJWT = (
       process.env.JWT_SECRET as string
     ) as JwtPayload;
     req.user = {
-      id: decoded.id as string,
-      role: decoded.role as string,
+      id: decoded.user.id as string,
+      role: decoded.user.role as string,
     };
 
     logger.info(
@@ -37,10 +38,30 @@ export const validateJWT = (
     );
     next();
   } catch (error) {
-    return res.status(HTTP_STATUS.FORBIDDEN).json({
+    return res.status(HTTP_STATUS.UNAUTHORIZED).json({
       success: false,
       message: error_messages.invalid_token,
       data: null,
     });
   }
+};
+
+export const generateAccessToken = (user_id: string, role: string) => {
+  return jwt.sign(
+    { user: { id: user_id, role } },
+    process.env.JWT_SECRET as string,
+    {
+      expiresIn: '15m',
+    }
+  );
+};
+
+export const generateRefreshToken = (user_id: string, role: string) => {
+  return jwt.sign(
+    { user: { id: user_id, role } },
+    process.env.JWT_SECRET as string,
+    {
+      expiresIn: '7d',
+    }
+  );
 };

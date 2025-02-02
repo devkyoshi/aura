@@ -1,6 +1,7 @@
 import { connect_db } from '@config/db';
 import authRouter from '@routes/auth_route';
 import userRouter from '@routes/user_route';
+import classroomRouter from '@routes/classroom_route';
 
 require('dotenv').config();
 
@@ -17,11 +18,16 @@ app.use(cors());
 connect_db().then((r) => console.log('MongoDB connected successfully'));
 
 //Routes
-app.get('/health', (req: any, res: { send: (arg0: string) => void }) => {
+app.get('/health', (_req: any, res: { send: (arg0: string) => void }) => {
   res.send('Aura backend server is running!');
 });
 
 app.use('/api/auth', authRouter);
+app.use(
+  '/api/classroom',
+  validateJWT as express.RequestHandler,
+  classroomRouter
+);
 app.use('/api/user', validateJWT as express.RequestHandler, userRouter);
 
 const PORT = process.env.SERVER_PORT || 5000;

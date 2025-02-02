@@ -4,7 +4,7 @@ import { CLASS_CATEGORY } from '@config/app_constants';
 const classroomSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String },
     price: { type: Number },
     instructor: {
       type: mongoose.Schema.Types.ObjectId,
@@ -35,9 +35,9 @@ const classroomSchema = new mongoose.Schema(
       ],
     },
     tags: [{ type: String }],
-    start_time: { type: Date, required: true },
-    end_time: { type: Date, required: true },
-    thumbnail: { type: String, required: true },
+    start_time: { type: Date },
+    end_time: { type: Date },
+    thumbnail: { type: String },
     published: { type: Boolean, default: false },
     is_active: { type: Boolean, default: true },
     is_private: { type: Boolean, default: false },

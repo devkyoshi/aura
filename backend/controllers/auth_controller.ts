@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import User from '@models/user_model';
 import { ILogin, IUser } from '@datatypes/user_tp';
 import {
@@ -10,6 +10,10 @@ import {
 import { Request } from 'express';
 import logger from '@config/logger';
 import { USER_ROLE } from '@config/app_constants';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from '../middlewares/jwtAuth_middleware';
 
 export const registerUser = async (req: Request<IUser>, res: any) => {
   try {
@@ -70,17 +74,29 @@ export const registerUser = async (req: Request<IUser>, res: any) => {
 
     await new_user.save();
 
-    const token = jwt.sign(
-      { id: new_user._id, role: new_user.role },
-      process.env.JWT_SECRET as string,
-      { expiresIn: '1d' }
+    const access_token = generateAccessToken(
+      new_user._id.toString(),
+      new_user.role
     );
+    const refresh_token = generateRefreshToken(
+      new_user._id.toString(),
+      new_user.role
+    );
+
+    new_user.refresh_token = refresh_token;
+    await new_user.save();
+
+    res.cookie('refresh_token', refresh_token, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: true,
+    });
 
     logger.info(
       `User registered successfully with username: ${user_data.username}`
     );
     return res.status(HTTP_STATUS.CREATED).json({
-      data: { token },
+      data: { access_token },
       message: success_messages.user_registered_successfully,
       success: true,
     });
@@ -131,20 +147,25 @@ export const loginUser = async (req: Request<ILogin>, res: any) => {
       });
     }
 
-    const token = jwt.sign(
-      { id: user._id, role: user.role },
-      process.env.JWT_SECRET as string,
-      {
-        expiresIn: '1d',
-      }
-    );
+    const access_token = generateAccessToken(user._id.toString(), user.role);
+    const refresh_token = generateRefreshToken(user._id.toString(), user.role);
+
+    user.refresh_token = refresh_token;
+    await user.save();
 
     logger.info(
       `User logged in successfully with username: ${login_request.username}`
     );
+
+    res.cookie('refresh_token', refresh_token, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: true,
+    });
+
     return res.status(HTTP_STATUS.OK).json({
       data: {
-        token,
+        access_token,
         user: {
           user_id: user._id.toString(),
           first_name: user.first_name,
@@ -159,6 +180,64 @@ export const loginUser = async (req: Request<ILogin>, res: any) => {
     });
   } catch (e) {
     logger.error('User logging attempt failed with error:  ', e);
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      message: error_messages.server_error,
+      success: false,
+    });
+  }
+};
+
+export const refreshToken = async (req: Request, res: any) => {
+  try {
+    const refresh_token = req.cookies.refresh_token;
+
+    if (!refresh_token) {
+      logger.error('Refresh token not provided');
+      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
+        data: null,
+        message: error_messages.unauthorized,
+        success: false,
+      });
+    }
+
+    const decoded = jwt.verify(
+      refresh_token,
+      process.env.JWT_SECRET as string
+    ) as JwtPayload;
+
+    const user = await User.findById(decoded.id);
+
+    if (!user || user.refresh_token !== refresh_token) {
+      logger.error('Invalid refresh token');
+      return res.status(HTTP_STATUS.FORBIDDEN).json({
+        data: null,
+        message: error_messages.unauthorized,
+        success: false,
+      });
+    }
+
+    const access_token = generateAccessToken(user._id.toString(), user.role);
+    const new_refresh_token = generateRefreshToken(
+      user._id.toString(),
+      user.role
+    );
+    user.refresh_token = new_refresh_token;
+    await user.save();
+
+    res.cookie('refresh_token', new_refresh_token, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: true,
+    });
+
+    return res.status(HTTP_STATUS.OK).json({
+      data: { access_token },
+      message: success_messages.token_refreshed,
+      success: true,
+    });
+  } catch (e) {
+    logger.error('Token refresh attempt failed with error: ', e);
     return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       data: null,
       message: error_messages.server_error,

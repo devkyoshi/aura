@@ -1,22 +1,22 @@
 export interface IClassroomRequest {
-  title: string;
-  description: string;
+  title: string; // Required
+  instructor: string; // Required
+  grade: string; // Required
+  category: string; // Required
+  description?: string;
   price?: number;
-  instructor: string;
   passcode?: string;
-  grade: string;
   lesson?: string[];
   students_enrolled?: string[];
-  category: string;
   tags?: string[];
-  start_time: string;
-  end_time: string;
-  thumbnail: string;
+  start_time?: string;
+  end_time?: string;
+  thumbnail?: string;
   published?: boolean;
-  is_private: boolean;
+  is_private?: boolean;
 }
 
-export interface IClassroomDTO {
+export interface IClassroomResponse {
   classroom_id: string;
   title: string;
   description: string;

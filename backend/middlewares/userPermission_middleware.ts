@@ -13,7 +13,7 @@ export const checkPermission = (required_permission: string) => {
 
     if (!req.user?.role) {
       logger.error('Request denied: Role not defined in the request');
-      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
+      return res.status(HTTP_STATUS.FORBIDDEN).json({
         success: false,
         message: error_messages.role_not_defined,
         data: null,
@@ -25,7 +25,7 @@ export const checkPermission = (required_permission: string) => {
     // Check if the role exists in the rolePermissions map
     if (!rolePermissions[userRole]) {
       logger.error(`Request denied: Invalid role: ${userRole}`);
-      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
+      return res.status(HTTP_STATUS.FORBIDDEN).json({
         success: false,
         message: error_messages.invalid_role,
         data: null,
