@@ -3,7 +3,6 @@ import { Request } from 'express';
 import logger from '@config/logger';
 import User from '@models/user_model';
 
-import mongoose from 'mongoose';
 import {
   error_messages,
   HTTP_STATUS,
@@ -11,8 +10,6 @@ import {
 } from '@config/constants';
 import bcrypt from 'bcryptjs';
 import { USER_ROLE } from '@config/app_constants';
-
-mongoose.set('debug', true);
 
 interface CustomRequest extends Request {
   user?: { id?: string };

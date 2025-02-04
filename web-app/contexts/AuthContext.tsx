@@ -42,11 +42,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (currentUser) {
-      router.push('/');
-    }
-  }, [currentUser, router]);
 
   const login = async (credentials: ILoginRequest) => {
     setLoading(true);

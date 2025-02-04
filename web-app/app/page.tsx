@@ -1,10 +1,26 @@
-import { Navbar } from '@/components/navbar/nav_bar';
+'use client';
+
+import { useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  return (
-    <div>
+  const {currentUser} = useAuth();
+  const router = useRouter();
 
-      <Navbar />
-    </div>
-  );
+  useEffect(() => {
+
+    if(currentUser?.role === 'admin' || currentUser?.role === 'instructor'){
+      router.push('dashboard/instructor');
+      return;
+    }
+
+    if(currentUser?.role === 'student'){
+      router.push('dashboard/student');
+      return;
+    }
+    router.push('/home');
+    return;
+  }, [currentUser]);
+
 }

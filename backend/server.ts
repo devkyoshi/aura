@@ -8,6 +8,7 @@ require('dotenv').config();
 import express from 'express';
 import cors from 'cors';
 import { validateJWT } from './middlewares/jwtAuth_middleware';
+import logger from '@config/logger';
 
 //Application initialization
 const app = express();
@@ -15,11 +16,21 @@ app.use(express.json());
 app.use(cors());
 
 //Database connection
-connect_db().then((r) => console.log('MongoDB connected successfully'));
+connect_db().then((r) => logger.info('MongoDB connected successfully!'));
 
 //Routes
 app.get('/health', (_req: any, res: { send: (arg0: string) => void }) => {
   res.send('Aura backend server is running!');
+});
+
+// Middleware to log incoming requests
+app.use((req, res, next) => {
+  logger.info(`[${req.method}] ${req.originalUrl} - ${req.ip}`);
+
+  /*if (req.method !== 'GET') {
+    logger.info(`Request Body: ${JSON.stringify(req.body)}`);
+  }*/
+  next();
 });
 
 app.use('/api/auth', authRouter);
@@ -32,19 +43,19 @@ app.use('/api/user', validateJWT as express.RequestHandler, userRouter);
 
 const PORT = process.env.SERVER_PORT || 5000;
 const server = app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  logger.info(`Server is running on port ${PORT}`);
 });
 
 const gracefulShutdown = (signal: string) => {
   console.log(`Received ${signal}. Closing server gracefully.`);
   server.close(() => {
-    console.log('Closed out remaining connections');
+    logger.info('Closed out remaining connections');
     process.exit(0);
   });
 
   // Force close server after 10secs
   setTimeout(() => {
-    console.error(
+    logger.error(
       'Could not close connections in time, forcefully shutting down'
     );
     process.exit(1);
@@ -53,13 +64,13 @@ const gracefulShutdown = (signal: string) => {
 
 // Catch unhandled exceptions
 process.on('uncaughtException', (err) => {
-  console.error('Uncaught exception: ', err);
+  logger.error('Uncaught exception: ', err);
   gracefulShutdown('uncaughtException');
 });
 
 // Catch unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
   gracefulShutdown('unhandledRejection');
 });
 
