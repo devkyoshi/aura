@@ -64,15 +64,16 @@ export function Navbar() {
 
   return (
     <div className={'flex items-center justify-between p-5'}>
-      <div className={'flex flex-row items-center gap-1 -mt-3'}>
+      <div className={'flex flex-row items-center  -mt-3'}>
+        <p className={'font-bold text-xl  text-logo-secondary'}>
+          <strong className={'text-primary'}>A</strong>ura
+        </p>
         <img
-          className={'h-4 w-4 md:h-6 md:w-6 lg:h-8 lg:w-8'}
+          className={'h-2 w-2 md:h-4 md:w-4 lg:h-6 lg:w-6 -mt-1'}
           alt={'app-logo'}
           src={toAbsoluteUrl('/media/images/app-logo.png')}
         />
-        <p className={'font-bold text-xl mt-2 text-logo-secondary'}>
-          <strong className={'text-primary'}>A</strong>ura
-        </p>
+
       </div>
       <div className={'hidden md:flex items-center justify-between'}>
         <NavigationMenu>

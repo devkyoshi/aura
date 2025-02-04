@@ -1,4 +1,4 @@
-'use client'; // Mark as client component
+'use client';
 
 import { cn, toAbsoluteUrl } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { House } from 'lucide-react';
+import { APP_CONSTANTS } from '@/config/app.constants';
 
 
 export function LoginForm({
@@ -38,7 +39,15 @@ export function LoginForm({
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card className="overflow-hidden">
-        <CardContent className="grid p-0 md:grid-cols-2">
+        <CardContent className="grid p-0 md:grid-cols-2 relative">
+
+          <div className={'absolute top-4 left-4'}>
+            <Link href={'/'}>
+              <Button variant={'outline'} className={'rounded-full w-8 h-8 p-2 hover:bg-primary/10 hover:text-primary'}>
+                <House />
+              </Button>
+            </Link>
+          </div>
           <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               {error && (
@@ -46,6 +55,10 @@ export function LoginForm({
               )}
 
               <div className="flex flex-col items-center text-center">
+                <div className={'flex items-center '}>
+                  <p className={'text-lg font-semibold text-primary'}>{APP_CONSTANTS.APP_NAME}</p>
+                  <img className={'w-5 h-5 -mt-1'} alt={'logo'}  src={toAbsoluteUrl('/media/images/app-logo.png')}/>
+                </div>
                 <h1 className="text-2xl font-bold">Welcome back</h1>
                 <p className="text-balance text-muted-foreground">
                   Login to your Aura account
@@ -122,13 +135,7 @@ export function LoginForm({
         <Link href="/privacy">Privacy Policy</Link>.
       </div>
 
-    <div  className={'-mt-3  text-primary text-center text-xs no-underline flex flex-row items-center gap-2 justify-center group'}>
-      <Link href={'/'} className={'no-underline'}>
-        <div className="border border-primary flex items-center gap-2 p-2 rounded-lg group-hover:bg-primary group-hover:text-white cursor-pointer">
-          <House size={16} className={'inline-block'}/> Home
-        </div>
-      </Link>
-    </div>
+
 
     </div>
   );
