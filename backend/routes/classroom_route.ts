@@ -1,6 +1,7 @@
 import {
   createClassroom,
   getAllClassrooms,
+  getClassroomsByInstructor,
 } from '@controllers/classroom_controller';
 import express, { Router } from 'express';
 import { checkPermission } from '../middlewares/userPermission_middleware';
@@ -15,5 +16,11 @@ router.post(
 );
 
 router.get('/all', getAllClassrooms);
+
+router.get(
+  '/instructor/get',
+  checkPermission(permissions.get_classrooms) as express.RequestHandler,
+  getClassroomsByInstructor
+);
 
 export default router;

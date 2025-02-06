@@ -52,7 +52,7 @@ export function InstructorNavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground bg-primary/20 "
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={(currentUser?.role === 'admin' || currentUser?.role === 'instructor') ? toAbsoluteUrl('/media/images/teacher-profile.png'): toAbsoluteUrl('/media/images/student-profile.jpg')} alt={currentUser?.first_name} />

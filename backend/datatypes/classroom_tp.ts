@@ -19,19 +19,17 @@ export interface IClassroomRequest {
 export interface IClassroomResponse {
   classroom_id: string;
   title: string;
-  description: string;
+  description?: string;
   price?: number;
-  instructor: string;
-  grade: string;
-  lesson?: string[];
+  grade?: string;
   students_enrolled?: string[];
-  category: string;
+  category?: string;
   tags?: string[];
-  start_time: string;
-  end_time: string;
-  thumbnail: string;
+  start_time?: string;
+  end_time?: string;
+  thumbnail?: string;
   published?: boolean;
-  is_active: boolean;
-  created_at: Date;
-  updated_at: Date;
+  is_active?: boolean;
+  created_at?: Date;
+  updated_at?: Date;
 }

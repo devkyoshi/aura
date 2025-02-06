@@ -5,8 +5,8 @@ import {
   MoreHorizontal,
   Share,
   Trash2,
-  type LucideIcon,
-} from "lucide-react"
+  BookOpen, Briefcase, Settings, Presentation,
+} from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -24,29 +24,45 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import Link from 'next/link';
 
-export function InstructorNavProjects({
-                              projects,
-                            }: {
-  projects: {
-    name: string
-    url: string
-    icon: LucideIcon
-  }[]
-}) {
+const pages = [
+  {
+    name: "Dashboard",
+    url: "/dashboard/instructor",
+    icon: Presentation,
+  },
+  {
+    name: "Classrooms",
+    url: "/dashboard/instructor/classrooms",
+    icon: BookOpen,
+  },
+  {
+    name: "Projects",
+    url: "/dashboard/instructor",
+    icon: Briefcase,
+  },
+  {
+    name: "Settings",
+    url: "/dashboard/instructor",
+    icon: Settings,
+  },
+]
+
+export function InstructorNavProjects() {
   const { isMobile } = useSidebar()
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel>Pages</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
+        {pages.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
-              <a href={item.url}>
+              <Link href={item.url}>
                 <item.icon />
                 <span>{item.name}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -77,12 +93,7 @@ export function InstructorNavProjects({
             </DropdownMenu>
           </SidebarMenuItem>
         ))}
-        <SidebarMenuItem>
-          <SidebarMenuButton>
-            <MoreHorizontal />
-            <span>More</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+
       </SidebarMenu>
     </SidebarGroup>
   )

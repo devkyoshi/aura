@@ -7,7 +7,6 @@ import { z } from 'zod';
 export const registerUser = async (signUpData: z.infer<typeof signupFormSchema>) => {
 
    const response = await apiClient.post('/auth/register', signUpData);
-   console.log(response);
    if(response.data.success) {
      toast('Registration successful. Please login to continue.');
      return true;
@@ -15,5 +14,5 @@ export const registerUser = async (signUpData: z.infer<typeof signupFormSchema>)
      toast.error(response.data.message || 'An error occurred while registering. Please try again.');
      return false;
    }
-
 }
+

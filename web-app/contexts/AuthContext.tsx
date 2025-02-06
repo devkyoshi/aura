@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Load user from localStorage on initial render
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const user_data: ILoginResponse = getAuthFromLocalStorage();
+      const user_data: ILoginResponse | null = getAuthFromLocalStorage();
       if (user_data) {
         setToken(user_data.access_token);
         setCurrentUser(user_data.user);
@@ -105,7 +105,7 @@ export const saveAuthToLocalStorage = (user_data: ILoginResponse) => {
 export const getAuthFromLocalStorage = () => {
   if (typeof window === 'undefined') return null;
   const user_data = localStorage.getItem(STORAGE_KEY as string);
-  return user_data ? JSON.parse(user_data) : null;
+  return user_data ? JSON.parse(user_data) as ILoginResponse : null;
 };
 
 export const removeAuthFromLocalStorage = () => {

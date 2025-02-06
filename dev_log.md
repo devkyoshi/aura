@@ -9,6 +9,16 @@
       - (403) - Forbidden: The client does not have access rights to the content; that is, it is unauthorized, so the server is refusing to give the requested resource.
 
 ---------------------------
+## Dev Log 06 - 2025-02-06
+- Created the instructor dashboard.
+- Displayed the classrooms in the dashboard.
+- Added classroom provider
+---------------------------
+## Dev Log 05 - 2025-02-02
+- I added template dashboards for the instructor and student
+- admins are also currently using the instructor dashboard
+- 
+---------------------------
 ## Dev Log 04 - 2025-02-01
 - I created frontend using Next.js and Tailwind CSS
 - Used shadeCn library for the UI components

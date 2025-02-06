@@ -15,7 +15,7 @@ body {
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 24 95% 57%;
+    --primary: 120 5% 46%;
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
@@ -35,14 +35,14 @@ body {
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
 
-    --sidebar-background: 24 30% 95%; /* Soft warm beige */
-    --sidebar-foreground: 240 5.3% 26.1%; /* Keeping this for contrast */
-    --sidebar-primary: 24 95% 40%; /* Deeper burnt orange */
-    --sidebar-primary-foreground: 0 0% 98%; /* Ensuring readability */
-    --sidebar-accent: 24 95% 57%; /* Main vibrant orange */
-    --sidebar-accent-foreground: 240 5.9% 10%; /* Dark foreground for contrast */
-    --sidebar-border: 24 50% 80%; /* Soft orange-tinted border */
-    --sidebar-ring: 24 85% 50%; /* Warm golden-orange ring */
+    --sidebar-background: 120 5% 90%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 120 5% 60%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 120 5% 60%;
+    --sidebar-accent-foreground: 120 5% 10%;
+    --sidebar-border: 90 20% 66%;
+    --sidebar-ring: 24 85% 50%;
 
     /* --sidebar-background: 0 0% 98%;
      --sidebar-foreground: 240 5.3% 26.1%;
@@ -61,7 +61,7 @@ body {
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 24 95% 57%;
+    --primary: 120 5% 46%;
     --primary-foreground: 240 5.9% 10%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;

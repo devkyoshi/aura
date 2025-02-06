@@ -5,7 +5,7 @@ import {
   HTTP_STATUS,
   success_messages,
 } from '@config/constants';
-import { IClassroomRequest } from '@datatypes/classroom_tp';
+import { IClassroomRequest, IClassroomResponse } from '@datatypes/classroom_tp';
 
 import User from '@models/user_model';
 import { CLASS_CATEGORIES, USER_ROLE } from '@config/app_constants';
@@ -124,6 +124,66 @@ export const getAllClassrooms = async (req: CustomRequest, res: any) => {
 
     return res.status(HTTP_STATUS.OK).json({
       data: classrooms,
+      message: success_messages.classroom_fetch_success,
+      success: true,
+    });
+  } catch (error) {
+    logger.error(`Fetch classrooms attempt failed: ${error}`);
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      message: error_messages.server_error,
+      success: false,
+    });
+  }
+};
+
+export const getClassroomsByInstructor = async (
+  req: CustomRequest,
+  res: any
+) => {
+  try {
+    if (!req.user) {
+      logger.error(`User not provided when creating classroom`);
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        data: null,
+        message: error_messages.user_not_provided,
+        success: false,
+      });
+    }
+
+    logger.info(
+      `Attempting to get all classrooms for the instructor: ${req.user.id}`
+    );
+
+    const classrooms = await Classroom.find({ instructor: req.user.id });
+
+    const response: IClassroomResponse[] = classrooms.map((classroom) => ({
+      classroom_id: classroom._id?.toString(),
+      title: classroom.title,
+      description: classroom.description as string,
+      price: classroom.price as number,
+      instructor: classroom.instructor?._id?.toString() as string,
+      grade: classroom.grade as string,
+      lesson: classroom.lesson?.map((lesson) => lesson?._id?.toString()) || [],
+      students_enrolled:
+        classroom.students_enrolled.map((student) => student.toString()) || [],
+      category: classroom.category as string,
+      tags: classroom.tags || [],
+      start_time: classroom.start_time?.toISOString(),
+      end_time: classroom.end_time?.toISOString(),
+      thumbnail: classroom.thumbnail as string,
+      published: classroom.published || false,
+      is_active: classroom.is_active || false,
+      created_at: classroom.createdAt,
+      updated_at: classroom.updatedAt,
+    }));
+
+    logger.info(
+      `Classrooms fetched successfully for the instructor: ${req.user.id}`
+    );
+
+    return res.status(HTTP_STATUS.OK).json({
+      data: response,
       message: success_messages.classroom_fetch_success,
       success: true,
     });

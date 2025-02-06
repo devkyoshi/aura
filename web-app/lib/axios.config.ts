@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getAuthFromLocalStorage } from '@/contexts/AuthContext';
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL, // Use your environment variable
@@ -11,9 +12,10 @@ const apiClient = axios.create({
 // Add a request interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const auth_data = getAuthFromLocalStorage()
+
+    if (auth_data) {
+      config.headers.Authorization = `Bearer ${auth_data.access_token}`;
     }
     return config;
   },

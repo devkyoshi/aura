@@ -25,7 +25,7 @@ import {
 
 } from '@/components/ui/sidebar';
 import { InstructorNavMain } from '@/components/sidebar/instructor/inst-nav-main';
-import { InstructorNavProjects } from '@/components/sidebar/instructor/inst-nav-project';
+import { InstructorNavProjects } from '@/components/sidebar/instructor/inst-nav-pages';
 import { InstructorNavSecondary } from '@/components/sidebar/instructor/inst-nav-secondary';
 import { InstructorNavUser } from '@/components/sidebar/instructor/inst-nav-user';
 import { InstructorTeamSwitcher } from '@/components/sidebar/instructor/inst-team-switcher';
