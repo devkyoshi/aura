@@ -301,7 +301,7 @@ export const getUser = async (req: CustomRequest, res: any) => {
   }
 };
 
-export const getAllUsers = async (req: Request, res: any) => {
+export const getAllUsers = async (_req: Request, res: any) => {
   logger.info('Attempting to get all users');
   try {
     const users = await User.find();

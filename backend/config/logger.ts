@@ -1,11 +1,20 @@
 import winston from 'winston';
 
+/**
+ * const logFormat = winston.format.combine(
+ *   winston.format.colorize(),
+ *   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), // Add timestamp to logs
+ *   winston.format.printf(({ timestamp, level, message }) => {
+ *     return `${timestamp} ${level}: ${message}`;
+ *   })
+ * );
+ */
+
 // Define the log format
 const logFormat = winston.format.combine(
-  winston.format.colorize(), // Add color for console output
-  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), // Add timestamp to logs
-  winston.format.printf(({ timestamp, level, message }) => {
-    return `${timestamp} ${level}: ${message}`;
+  winston.format.colorize(),
+  winston.format.printf(({ level, message }) => {
+    return `${level}: ${message}`;
   })
 );
 
@@ -20,7 +29,7 @@ const logger = winston.createLogger({
         winston.format.simple()
       ),
     }), // Log to console
-    new winston.transports.File({ filename: 'app.log' }), // Log to file
+    new winston.transports.File({ filename: 'app.log' }),
   ],
 });
 

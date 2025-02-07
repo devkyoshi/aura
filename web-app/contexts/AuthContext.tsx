@@ -73,11 +73,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const logout = () => {
-    setToken(null);
-    setCurrentUser(null);
-    removeAuthFromLocalStorage();
-    router.push('/auth/login');
+  const logout = async () => {
+    try {
+      const response = await apiClient.get('/auth/logout');
+
+      if(response.data.success) {
+        toast.success(response.data.message || 'Logged out successfully');
+        setToken(null);
+        setCurrentUser(null);
+        removeAuthFromLocalStorage();
+        router.push('/auth/login');
+      }
+    } catch (e) {
+      toast.error('An error occurred while logging out. Please try again.');
+    }
   };
 
   return (

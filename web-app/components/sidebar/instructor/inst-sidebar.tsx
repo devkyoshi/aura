@@ -25,7 +25,7 @@ import {
 
 } from '@/components/ui/sidebar';
 import { InstructorNavMain } from '@/components/sidebar/instructor/inst-nav-main';
-import { InstructorNavProjects } from '@/components/sidebar/instructor/inst-nav-pages';
+import { InstructorNavPages } from '@/components/sidebar/instructor/inst-nav-pages';
 import { InstructorNavSecondary } from '@/components/sidebar/instructor/inst-nav-secondary';
 import { InstructorNavUser } from '@/components/sidebar/instructor/inst-nav-user';
 import { InstructorTeamSwitcher } from '@/components/sidebar/instructor/inst-team-switcher';
@@ -110,7 +110,7 @@ export function InstructorSidebar({ ...props }: React.ComponentProps<typeof Side
       </SidebarHeader>
       <SidebarContent>
         {/*<InstructorNavMain items={data.navMain} />*/}
-        <InstructorNavProjects projects={data.projects} />
+        <InstructorNavPages  />
         {data.navMain.map((item) => (
           <Collapsible
             key={item.title}

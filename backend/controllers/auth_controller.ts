@@ -14,6 +14,8 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from '../middlewares/jwtAuth_middleware';
+import mongoose from 'mongoose';
+import { CustomRequest } from '@datatypes/response_tp';
 
 export const registerUser = async (req: Request<IUser>, res: any) => {
   try {
@@ -89,7 +91,7 @@ export const registerUser = async (req: Request<IUser>, res: any) => {
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
       sameSite: 'strict',
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
     });
 
     logger.info(
@@ -160,7 +162,7 @@ export const loginUser = async (req: Request<ILogin>, res: any) => {
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
       sameSite: 'strict',
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
     });
 
     return res.status(HTTP_STATUS.OK).json({
@@ -190,7 +192,7 @@ export const loginUser = async (req: Request<ILogin>, res: any) => {
 
 export const refreshToken = async (req: Request, res: any) => {
   try {
-    const refresh_token = req.cookies.refresh_token;
+    const refresh_token = req.cookies?.refresh_token;
 
     if (!refresh_token) {
       logger.error('Refresh token not provided');
@@ -201,18 +203,36 @@ export const refreshToken = async (req: Request, res: any) => {
       });
     }
 
-    const decoded = jwt.verify(
-      refresh_token,
-      process.env.JWT_SECRET as string
-    ) as JwtPayload;
+    if (!process.env.JWT_SECRET) {
+      logger.error('JWT secret is not defined');
+      return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        data: null,
+        message: error_messages.server_error,
+        success: false,
+      });
+    }
 
-    const user = await User.findById(decoded.id);
+    let decoded: JwtPayload;
+    try {
+      decoded = jwt.verify(refresh_token, process.env.JWT_SECRET) as JwtPayload;
+    } catch (error) {
+      logger.error('Invalid or expired refresh token');
+      return res.status(HTTP_STATUS.FORBIDDEN).json({
+        data: null,
+        message: error_messages.invalid_token,
+        success: false,
+      });
+    }
+
+    const user = await User.findById(decoded.user.id).select(
+      'refresh_token role'
+    );
 
     if (!user || user.refresh_token !== refresh_token) {
       logger.error('Invalid refresh token');
       return res.status(HTTP_STATUS.FORBIDDEN).json({
         data: null,
-        message: error_messages.unauthorized,
+        message: error_messages.user_not_found,
         success: false,
       });
     }
@@ -222,13 +242,14 @@ export const refreshToken = async (req: Request, res: any) => {
       user._id.toString(),
       user.role
     );
+
     user.refresh_token = new_refresh_token;
     await user.save();
 
     res.cookie('refresh_token', new_refresh_token, {
       httpOnly: true,
       sameSite: 'strict',
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
     });
 
     return res.status(HTTP_STATUS.OK).json({
@@ -238,6 +259,37 @@ export const refreshToken = async (req: Request, res: any) => {
     });
   } catch (e) {
     logger.error('Token refresh attempt failed with error: ', e);
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      message: error_messages.server_error,
+      success: false,
+    });
+  }
+};
+
+export const logoutUser = async (req: CustomRequest, res: any) => {
+  try {
+    res.clearCookie('refresh_token', {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+    });
+
+    if (req.user) {
+      await User.updateOne(
+        { _id: new mongoose.Types.ObjectId(req.user.id) },
+        { $set: { refresh_token: '' } }
+      );
+      logger.info(`User logged out successfully with user_id: ${req.user.id}`);
+    }
+
+    return res.status(HTTP_STATUS.OK).json({
+      data: null,
+      message: success_messages.user_logout_success,
+      success: true,
+    });
+  } catch (e) {
+    logger.error('User logout attempt failed with error: ', e);
     return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       data: null,
       message: error_messages.server_error,

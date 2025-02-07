@@ -2,6 +2,7 @@ import { connect_db } from '@config/db';
 import authRouter from '@routes/auth_route';
 import userRouter from '@routes/user_route';
 import classroomRouter from '@routes/classroom_route';
+import cookieParser from 'cookie-parser';
 
 require('dotenv').config();
 
@@ -13,10 +14,16 @@ import logger from '@config/logger';
 //Application initialization
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 
 //Database connection
-connect_db().then((r) => logger.info('MongoDB connected successfully!'));
+connect_db().then(() => logger.info('MongoDB connected successfully!'));
 
 //Routes
 app.get('/health', (_req: any, res: { send: (arg0: string) => void }) => {
@@ -24,7 +31,7 @@ app.get('/health', (_req: any, res: { send: (arg0: string) => void }) => {
 });
 
 // Middleware to log incoming requests
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   logger.info(`[${req.method}] ${req.originalUrl} - ${req.ip}`);
 
   /*if (req.method !== 'GET') {

@@ -49,7 +49,7 @@ const pages = [
   },
 ]
 
-export function InstructorNavProjects() {
+export function InstructorNavPages() {
   const { isMobile } = useSidebar()
 
   return (

@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { error_messages, HTTP_STATUS } from '@config/constants';
 import logger from '@config/logger';
-import { ObjectId } from 'mongoose';
 
 interface CustomRequest extends Request {
   user?: { id: string; role: string } | string;
@@ -16,6 +15,7 @@ export const validateJWT = (
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
+    logger.error('Token not received with the request.');
     return res.status(HTTP_STATUS.UNAUTHORIZED).json({
       success: false,
       message: error_messages.unauthorized,
@@ -33,11 +33,9 @@ export const validateJWT = (
       role: decoded.user.role as string,
     };
 
-    logger.info(
-      `User with id: ${req.user.id} and role: ${req.user.role} is authorized`
-    );
     next();
   } catch (error) {
+    logger.error('Invalid or expired token');
     return res.status(HTTP_STATUS.UNAUTHORIZED).json({
       success: false,
       message: error_messages.invalid_token,
@@ -51,7 +49,7 @@ export const generateAccessToken = (user_id: string, role: string) => {
     { user: { id: user_id, role } },
     process.env.JWT_SECRET as string,
     {
-      expiresIn: '15m',
+      expiresIn: '1h',
     }
   );
 };

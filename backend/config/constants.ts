@@ -24,6 +24,7 @@ export const success_messages = {
   user_registered_successfully: 'User registered successfully',
   user_login_success: 'User logged in successfully',
   user_updated_success: 'User updated successfully',
+  user_logout_success: 'User logged out successfully',
   user_deleted_success: 'User deleted successfully',
   user_fetch_success: 'User fetched successfully',
   token_refreshed: 'Token refreshed successfully',

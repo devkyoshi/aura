@@ -116,7 +116,7 @@ export const createClassroom = async (
   }
 };
 
-export const getAllClassrooms = async (req: CustomRequest, res: any) => {
+export const getAllClassrooms = async (_req: CustomRequest, res: any) => {
   logger.info('Attempting to fetch classrooms');
   try {
     const classrooms = await Classroom.find().populate('instructor');

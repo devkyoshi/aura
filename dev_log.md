@@ -8,6 +8,11 @@
     - **userPermission middleware (FORBIDDEN)**
       - (403) - Forbidden: The client does not have access rights to the content; that is, it is unauthorized, so the server is refusing to give the requested resource.
 
+
+---------------------------
+## Dev Log 07 - 2025-02-07
+- I checked the refresh token part. now it will refresh the access_token by sending a request to the backend.
+- created logout functionality(backend) which removes the cookie and the refresh token from the user's database.
 ---------------------------
 ## Dev Log 06 - 2025-02-06
 - Created the instructor dashboard.
